@@ -1,0 +1,6 @@
+<odoo>
+    <record id="default_device_scale" model="devices.device">
+        <field name="name">Scale</field>
+        <field name="device_id">1</field>
+    </record>
+</odoo>

@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_helpdesk_team_form_custom" model="ir.ui.view">
+        <field name="name">helpdesk.team.form.custom</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id" ref="helpdesk.view_helpdesk_team_form"/>
+        <field name="arch" type="xml">
+            <!-- Replace the member_ids field to show employees -->
+            <xpath expr="//field[@name='member_ids']" position="replace">
+                <field name="member_ids" widget="many2many_tags" options="{'no_create': True}" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_team_tree_custom" model="ir.ui.view">
+        <field name="name">helpdesk.team.tree.custom</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id" ref="helpdesk.view_helpdesk_team_tree"/>
+        <field name="arch" type="xml">
+            <!-- Ensure members show correctly in the tree view -->
+            <xpath expr="//field[@name='member_ids']" position="replace">
+                <field name="member_ids" widget="many2many_tags" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

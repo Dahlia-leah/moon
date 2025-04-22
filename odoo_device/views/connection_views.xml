@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action for Connections -->
+    <record id="action_connection" model="ir.actions.act_window">
+        <field name="name">Connections</field>
+        <field name="res_model">devices.connection</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'search_default_my_connections': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new connection
+            </p>
+            <p>
+                Add a new connection to manage your device integrations.
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree View for Connections -->
+    <record id="view_connection_tree" model="ir.ui.view">
+        <field name="name">devices.connection.tree</field>
+        <field name="model">devices.connection</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="status=='valid'" decoration-danger="status=='invalid'">
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="status"/>
+                <field name="last_checked"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Connections -->
+    <record id="view_connection_form" model="ir.ui.view">
+        <field name="name">devices.connection.form</field>
+        <field name="model">devices.connection</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="active" invisible="1"/>
+                    <button name="archive_connection" string="Archive" type="object"
+                            invisible="active == False"
+                            class="oe_highlight" confirm="Are you sure you want to archive this connection?"/>
+                    <button name="archive_connection" string="Unarchive" type="object"
+                            invisible="active == True"
+                            class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Connection Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="device_id"/>
+                        </group>
+                        <group>
+                            <field name="status" readonly="1"/>
+                            <field name="last_checked" readonly="1"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="JSON Data">
+                            <field name="json_data" readonly="1" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View for Connections -->
+    <record id="view_connection_search" model="ir.ui.view">
+        <field name="name">devices.connection.search</field>
+        <field name="model">devices.connection</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="user_id"/>
+                <filter string="My Connections" name="my_connections" domain="[('user_id', '=', uid)]"/>
+                <filter string="Valid Connections" name="valid" domain="[('status', '=', 'valid')]"/>
+                <filter string="Invalid Connections" name="invalid" domain="[('status', '=', 'invalid')]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Device" name="group_by_device" context="{'group_by': 'device_id'}"/>
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View for Connections -->
+    <record id="view_connection_kanban" model="ir.ui.view">
+        <field name="name">devices.connection.kanban</field>
+        <field name="model">devices.connection</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="status"/>
+                <field name="last_checked"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <span t-attf-class="badge badge-pill badge-#{record.status.raw_value == 'valid' ? 'success' : 'danger'}">
+                                        <field name="status"/>
+                                    </span>
+                                </div>
+                                <ul>
+                                    <li>Device: <field name="device_id"/></li>
+                                    <li>Last Checked: <field name="last_checked"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_devices_root" name="Devices" sequence="1" web_icon="odoo_device,static/description/icon.png"/>
+    <menuitem id="menu_connection" name="Connections" parent="menu_devices_root" action="action_connection" sequence="10"/>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_devices_device,access_devices_device,model_devices_device,,1,1,0,0
+access_devices_connection,access_devices_connection,model_devices_connection,,1,1,1,1
