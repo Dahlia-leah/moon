@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <!-- Inherit and modify the stock.picking form view -->
+        <record id="view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_uom']" position="after">
+                    <!-- Add the external weight field after the product_uom field -->
+                    <field name="external_weight"/>
+                    <!-- Add the external unit field after the external weight field -->
+                    <field name="external_unit"/>
+                    <!-- Add a button to fetch and print the report -->
+                   <!-- <field name="selected_device_id"/>invisible="picking_type_id != 6 or location_id != 203 or location_dest_id != 17 or state != 'assigned'"-->
+                    <!--<button name="action_print_report"
+                            icon="fa-tag"
+                            type="object"
+                            title="Fetch weight from IoT device"
+                            invisible=" state != 'assigned'"
+                            class="btn-primary"/>-->
+                    <button name="action_print_report"
+                            icon="fa-tag"
+                            type="object"
+                            title="Fetch weight from IoT device"
+                            invisible=" state != 'assigned'"
+                            class="btn-primary"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
